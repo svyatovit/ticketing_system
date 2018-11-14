@@ -1,5 +1,4 @@
-package ci284.ass1.pqueue;
-import ci284.ass1.test.TestPQueue;
+package pqueue;
 
 
 public class PQueueItem<T> {

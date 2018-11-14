@@ -1,4 +1,4 @@
-package ci284.ass1.pqueue;
+package pqueue;
 
 public class PQueue<T> {
 

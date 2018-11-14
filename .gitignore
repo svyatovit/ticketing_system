@@ -1,4 +1,7 @@
+#Java binaries
+*.class
 #Eclipse project files
 .metadata
 .project
 .settings
+.classpath

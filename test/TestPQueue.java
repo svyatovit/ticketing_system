@@ -1,14 +1,13 @@
-package ci284.ass1.test;
-
-import java.util.Random;
-
-import org.junit.Before;
-import org.junit.Test;
+package test;
 
 import static org.junit.Assert.*;
 
-import ci284.ass1.pqueue.PQueue;
-import ci284.ass1.pqueue.PQueueItem;
+import java.util.Random;
+import org.junit.Before;
+import org.junit.Test;
+
+import pqueue.PQueue;
+import pqueue.PQueueItem;
 
 public class TestPQueue {
 
