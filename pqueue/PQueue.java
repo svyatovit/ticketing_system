@@ -35,6 +35,8 @@ public class PQueue<T> {
 	 * @return
 	 */
 	public T pop() {
+		if (head == null)
+			return null;
 
 		T data = head.getData();
 		PQueueItem<T> next = head.getNext();
@@ -50,6 +52,8 @@ public class PQueue<T> {
 	 * @return
 	 */
 	public T peek() {
+		if (head == null)
+			return null;
 		return head.getData();
 	}
 
@@ -59,12 +63,13 @@ public class PQueue<T> {
 	 * @return
 	 */
 	public PQueueItem<T> popItem() {
+		if (head == null)
+			return null;
 
 		PQueueItem<T> prev_head = head;
 		head = head.getNext();
 
 		return prev_head;
-
 	}
 
 	/**
@@ -73,7 +78,6 @@ public class PQueue<T> {
 	 * @return
 	 */
 	public PQueueItem<T> peekItem() {
-		// throw new UnsupportedOperationException("Method not implemented");
 
 		return head;
 	}
@@ -124,6 +128,75 @@ public class PQueue<T> {
 		}
 
 	}
+
+	/**
+	 * Binary search algorithm within the queue
+	 */
+	public PQueueItem<T> search_previous(int priority) {
+
+		if (head == null)
+			return null;
+
+		if (head.getPriority() == priority)
+			return null;
+
+		PQueueItem<T> item = head;
+		PQueueItem<T> prev = null;
+		PQueueItem<T> next = head.getNext();
+
+		while (item.getNext() != null && item.getNext().getPriority() != priority) {
+			prev = item;
+			item = item.getNext();
+			next = item.getNext();
+		}
+
+		if (item.getNext() != null)
+			return item;
+		else
+			throw new RuntimeException("No such element present");
+	}
+
+	public PQueueItem<T> search(int priority) {
+		PQueueItem<T> prev = search_previous(priority);
+		if (prev == null)
+			return head;
+		
+		return prev.getNext();
+	}
+	
+	/**
+	 * Remove an element from the queue
+	 */
+	public void remove(int priority) {
+		PQueueItem<T> prev = search_previous(priority);
+		if(prev == null)
+		{
+			// Removing head!
+			head = head.getNext();
+			return;
+		}
+		
+		PQueueItem<T> item = prev.getNext();
+		PQueueItem<T> next = item.getNext();
+		
+		// Now removing item object from the list
+		prev.setNext(next);
+		item = null;
+	}
+	
+	public void update(int priority, int updated_priority)
+	{
+		PQueueItem<T> item = search(priority);
+		if(item == null)
+		{
+			// Removing
+		}
+			
+		
+		
+	}
+
+	
 
 	/**
 	 * Return the length of the queue
