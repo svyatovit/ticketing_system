@@ -153,50 +153,58 @@ public class PQueue<T> {
 		if (item.getNext() != null)
 			return item;
 		else
-			throw new RuntimeException("No such element present");
+			throw new IllegalArgumentException("The priority " + String.valueOf(priority) + " not found");
 	}
 
 	public PQueueItem<T> search(int priority) {
 		PQueueItem<T> prev = search_previous(priority);
 		if (prev == null)
 			return head;
-		
+
 		return prev.getNext();
 	}
-	
+
 	/**
 	 * Remove an element from the queue
 	 */
 	public void remove(int priority) {
 		PQueueItem<T> prev = search_previous(priority);
-		if(prev == null)
-		{
+		if (prev == null) {
 			// Removing head!
 			head = head.getNext();
 			return;
 		}
-		
+
 		PQueueItem<T> item = prev.getNext();
 		PQueueItem<T> next = item.getNext();
-		
+
 		// Now removing item object from the list
 		prev.setNext(next);
 		item = null;
 	}
-	
-	public void update(int priority, int updated_priority)
-	{
-		PQueueItem<T> item = search(priority);
-		if(item == null)
-		{
-			// Removing
-		}
-			
-		
-		
-	}
 
-	
+	public void update(int priority, int updated_priority) {
+		PQueueItem<T> prev = search_previous(priority);
+		T data;
+		if (prev == null) {
+			// Updating head
+			data = head.getData();
+			head = head.getNext();
+
+		} else {
+			PQueueItem<T> item = prev.getNext();
+			PQueueItem<T> next = item.getNext();
+
+			// Store current item data
+			data = item.getData();
+			// Remove current item from the list
+			prev.setNext(next);
+			item = null;
+		}
+
+		// Insert data with the updated priority
+		insert(data, updated_priority);
+	}
 
 	/**
 	 * Return the length of the queue

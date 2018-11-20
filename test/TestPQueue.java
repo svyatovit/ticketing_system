@@ -29,7 +29,7 @@ public class TestPQueue {
 		pq.insert("Peaches", 3);
 		assertEquals(pq.length(), 7);
 	}
-	
+
 	@Test
 	public void testPop() {
 		PQueue<String> pq = new PQueue<String>();
@@ -73,7 +73,7 @@ public class TestPQueue {
 		int size = 99;
 		int pqi;
 		PQueue<Integer> pq = new PQueue<Integer>();
-		for(int i=0; i<size;i++) {
+		for (int i = 0; i < size; i++) {
 			pqi = (new Random()).nextInt(50);
 			pq.insert(pqi, pqi);
 		}
@@ -81,10 +81,10 @@ public class TestPQueue {
 		int l = pq.length();
 		assertEquals(l, size);
 		PQueueItem<Integer> lastItem = null, nextItem = null;
-		for(int i=0;i<l;i++) {
+		for (int i = 0; i < l; i++) {
 			nextItem = pq.popItem();
-			if(lastItem != null) {
-				assertTrue(lastItem.getPriority()>=nextItem.getPriority());
+			if (lastItem != null) {
+				assertTrue(lastItem.getPriority() >= nextItem.getPriority());
 				lastItem = nextItem;
 			}
 		}
@@ -95,7 +95,7 @@ public class TestPQueue {
 		int size = 99;
 		int pqi;
 		PQueue<Integer> pq = new PQueue<Integer>(PQueue.ORDER.ASC);
-		for(int i=0; i<size;i++) {
+		for (int i = 0; i < size; i++) {
 			pqi = (new Random()).nextInt(10);
 			pq.insert(pqi, pqi);
 		}
@@ -103,21 +103,21 @@ public class TestPQueue {
 		int l = pq.length();
 		assertEquals(l, size);
 		PQueueItem<Integer> lastItem = null, nextItem = null;
-		for(int i=0;i<l;i++) {
+		for (int i = 0; i < l; i++) {
 			nextItem = pq.popItem();
-			if(lastItem != null) {
-				assertTrue(lastItem.getPriority()<=nextItem.getPriority());
+			if (lastItem != null) {
+				assertTrue(lastItem.getPriority() <= nextItem.getPriority());
 				lastItem = nextItem;
 			}
 		}
 	}
-	
-	@Test 
+
+	@Test
 	public void testInsertDesc() {
 		int size = 99;
 		int pqi;
 		PQueue<Integer> pq = new PQueue<Integer>(PQueue.ORDER.DESC);
-		for(int i=0; i<size;i++) {
+		for (int i = 0; i < size; i++) {
 			pqi = (new Random()).nextInt(99);
 			pq.insert(pqi, pqi);
 		}
@@ -125,13 +125,38 @@ public class TestPQueue {
 		int l = pq.length();
 		assertEquals(l, size);
 		PQueueItem<Integer> lastItem = null, nextItem = null;
-		for(int i=0;i<l;i++) {
+		for (int i = 0; i < l; i++) {
 			nextItem = pq.popItem();
-			if(lastItem != null) {
-				assertTrue(lastItem.getPriority()>=nextItem.getPriority());
+			if (lastItem != null) {
+				assertTrue(lastItem.getPriority() >= nextItem.getPriority());
 				lastItem = nextItem;
 			}
 		}
+	}
+
+	@Test
+	public void testSearchPrevHead() {
+		int size = 99;
+		int[] pqi = new int[size];
+		PQueue<Integer> pq = new PQueue<Integer>(PQueue.ORDER.ASC);
+		for (int i = 0; i < size; i++) {
+			pqi[i] = i; 
+			pq.insert(pqi[i], pqi[i]);
+		}
+
+		assertTrue(pq.search_previous(pq.peekItem().getPriority()) == null);
+	}
+
+	@Test
+	public void testSearchPrevMiddle() {
+		int size = 99;
+		int[] pqi = new int[size];
+		PQueue<Integer> pq = new PQueue<Integer>(PQueue.ORDER.ASC);
+		for (int i = 0; i < size; i++) {
+			pqi[i] = i;
+			pq.insert(pqi[i], pqi[i]);
+		}
+		assertTrue(pq.search_previous(pqi[45]).getData() == Integer.valueOf(pqi[44]));
 	}
 
 }
