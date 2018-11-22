@@ -1,5 +1,7 @@
 package pqueue;
 
+import static org.junit.Assert.assertTrue;
+
 public class PQueue<T> {
 
 	private PQueueItem<T> head;
@@ -130,9 +132,9 @@ public class PQueue<T> {
 	}
 
 	/**
-	 * Binary search algorithm within the queue
+	 * O(N) search algorithm within the queue
 	 */
-	public PQueueItem<T> search_previous(int priority) {
+	private PQueueItem<T> search_previous(int priority) {
 
 		if (head == null)
 			return null;
@@ -156,12 +158,12 @@ public class PQueue<T> {
 			throw new IllegalArgumentException("The priority " + String.valueOf(priority) + " not found");
 	}
 
-	public PQueueItem<T> search(int priority) {
+	public T search(int priority) {
 		PQueueItem<T> prev = search_previous(priority);
 		if (prev == null)
-			return head;
+			return head.getData();
 
-		return prev.getNext();
+		return prev.getNext().getData();
 	}
 
 	/**
@@ -184,6 +186,18 @@ public class PQueue<T> {
 	}
 
 	public void update(int priority, int updated_priority) {
+		if (priority == updated_priority) {
+			// It's the same priority, do nothing!
+			return;
+		}
+
+		try {
+			T found_element = search(updated_priority);
+			// We should not be here!
+			assertTrue(false);
+		} catch (IllegalArgumentException e) {
+		}
+
 		PQueueItem<T> prev = search_previous(priority);
 		T data;
 		if (prev == null) {

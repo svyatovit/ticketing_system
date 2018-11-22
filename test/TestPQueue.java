@@ -135,20 +135,7 @@ public class TestPQueue {
 	}
 
 	@Test
-	public void testSearchPrevHead() {
-		int size = 99;
-		int[] pqi = new int[size];
-		PQueue<Integer> pq = new PQueue<Integer>(PQueue.ORDER.ASC);
-		for (int i = 0; i < size; i++) {
-			pqi[i] = i; 
-			pq.insert(pqi[i], pqi[i]);
-		}
-
-		assertTrue(pq.search_previous(pq.peekItem().getPriority()) == null);
-	}
-
-	@Test
-	public void testSearchPrevMiddle() {
+	public void testSearchvHead() {
 		int size = 99;
 		int[] pqi = new int[size];
 		PQueue<Integer> pq = new PQueue<Integer>(PQueue.ORDER.ASC);
@@ -156,7 +143,84 @@ public class TestPQueue {
 			pqi[i] = i;
 			pq.insert(pqi[i], pqi[i]);
 		}
-		assertTrue(pq.search_previous(pqi[45]).getData() == Integer.valueOf(pqi[44]));
+
+		assertTrue(pq.search(pq.peekItem().getPriority()) == pq.peek());
+	}
+
+	@Test
+	public void testSearchRandom() {
+		int size = 99;
+		int[] pqi = new int[size];
+		PQueue<Integer> pq = new PQueue<Integer>(PQueue.ORDER.ASC);
+		for (int i = 0; i < size; i++) {
+			pqi[i] = i;
+			pq.insert(pqi[i], pqi[i]);
+		}
+		for (int i = 0; i < size; i++) {
+			int e = (new Random()).nextInt(99);
+			assertTrue(pq.search(e) == Integer.valueOf(pqi[e]));
+		}
+	}
+
+	@Test
+	public void testSearchLast() {
+		int size = 99;
+		int[] pqi = new int[size];
+		PQueue<Integer> pq = new PQueue<Integer>(PQueue.ORDER.ASC);
+		for (int i = 0; i < size; i++) {
+			pqi[i] = i;
+			pq.insert(pqi[i], pqi[i]);
+		}
+		assertTrue(pq.search(pqi[size - 1]) == pqi[size - 1]);
+	}
+
+	@Test
+	public void testRemove() {
+		int size = 99;
+		int[] pqi = new int[size];
+		PQueue<Integer> pq = new PQueue<Integer>(PQueue.ORDER.ASC);
+		for (int i = 0; i < size; i++) {
+			pqi[i] = i;
+			pq.insert(pqi[i], pqi[i]);
+		}
+		int element = (new Random()).nextInt(99);
+		pq.remove(element);
+		try {
+			int found_element = pq.search(element);
+			System.out.println(found_element);
+			// We should not be here!
+			assertTrue(false);
+		} catch (IllegalArgumentException e) {
+		}
+	}
+
+	@Test
+	public void testUpdate() {
+		int size = 99;
+		int[] pqi = new int[size];
+		PQueue<Integer> pq = new PQueue<Integer>(PQueue.ORDER.ASC);
+		for (int i = 0; i < size; i++) {
+			pqi[i] = i;
+			pq.insert(pqi[i], pqi[i]);
+		}
+		int priority = (new Random()).nextInt(99);
+		// New priority!
+		int updated_priority = size + 1;
+		pq.update(priority, updated_priority);
+
+		try {
+			int found_element = pq.search(priority);
+			// We should not be here!
+			assertTrue(false);
+		} catch (IllegalArgumentException e) {
+		}
+
+		try {
+			int found_element = pq.search(updated_priority);
+		} catch (IllegalArgumentException e) {
+			// We should not be here!
+			assertTrue(false);
+		}
 	}
 
 }
