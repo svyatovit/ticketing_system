@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 public class PQueue<T> {
 
-	private PQueueItem<T> head;
+	protected PQueueItem<T> head;
 
 	public static enum ORDER {
 		ASC, DESC;
