@@ -1,10 +1,10 @@
+package ticketing_system;
 
 public class Ticket {
 	private String creator;
 	private String owner;
-	
-	public Ticket(String creator, String owner)
-	{
+
+	public Ticket(String creator, String owner) {
 		this.setCreator(creator);
 		this.setOwner(owner);
 	}
@@ -25,4 +25,7 @@ public class Ticket {
 		this.owner = owner;
 	}
 
+	public String toString() {
+		return new String("creator:" + this.creator + "," + "owner:" + this.owner);
+	}
 }

@@ -1,3 +1,4 @@
+package ticketing_system;
 import pqueue.PQueue;
 import pqueue.PQueueItem;
 
@@ -9,21 +10,40 @@ public class TicketSystem extends PQueue<Ticket> {
 	public static int MAX_TICKET_TYPE = 4;
 	
 	//0x00FFFFFF ~ 16 million tickets for each type
-	public static int MAX_TICKET_ID = (1<<24 - 1); 
+	public static int MAX_TICKET_ID = (1<<24) - 1; 
 
 	public static int[] ticket_id;
 
 	// TicketSystem factory function 
 	public static TicketSystem start() {
 		ticket_id = new int[MAX_TICKET_TYPE];
+		for (int type = 0; type < MAX_TICKET_TYPE; type++)
+		{
+			ticket_id[type] = 0;
+		}
 		
 		return new TicketSystem(); 
 	}
 
+	private static int get_ticket_id(int priority) {
+		if (ticket_id[priority] + 1 > MAX_TICKET_ID)
+		{
+			throw new RuntimeException("Exceed the maximum number of tickets " + ticket_id[priority] + 
+					"for priority" + priority);
+		}
+		return (priority << 24) | ++ticket_id[priority];
+	}
+	
 	public TicketSystem() {
 		super(ORDER.ASC);
 	}
 	
+	public int add(Ticket data, int priority)
+	{
+		int ticket_id = get_ticket_id(priority);
+		super.insert(data, ticket_id);
+		return ticket_id;
+	}
 	
 	/**
 	 * O(N) search algorithm within the queue
@@ -49,7 +69,7 @@ public class TicketSystem extends PQueue<Ticket> {
 		if (item.getNext() != null)
 			return item;
 		else
-			throw new IllegalArgumentException("The priority " + String.valueOf(ticket_id) + " not found");
+			throw new IllegalArgumentException("The ticket id " + String.valueOf(ticket_id) + " not found");
 	}
 
 	public Ticket search(int ticket_id) {
@@ -79,7 +99,7 @@ public class TicketSystem extends PQueue<Ticket> {
 		item = null;
 	}
 
-	public void update(int ticket_id, int updated_priority) {
+	public int upgrade(int ticket_id, int updated_priority) {
 		
 		PQueueItem<Ticket> prev = search_previous(ticket_id);
 		Ticket data;
@@ -99,7 +119,49 @@ public class TicketSystem extends PQueue<Ticket> {
 		}
 
 		// Insert data with the updated priority
-		insert(data, updated_priority);
+		return add(data, updated_priority);
+	}
+	
+	public int priority(int ticket_id)
+	{
+		return (ticket_id & 0xFF000000) >> 24;
+	}
+	
+	public String priorityString(int ticket_id)
+	{
+		switch(priority(ticket_id)) 
+		{
+		case 0:
+			return new String("SECURITY");
+		case 1:
+			return new String("NETWORK");
+		case 2:
+			return new String("SOFTWARE");
+		case 3:
+			return new String("COMPUTER");
+		}
+		return new String("Unknown");
+	}
+	public int id(int ticket_id)
+	{
+		return (ticket_id & 0x00FFFFFF);
+	}
+	
+	public String toString() {
+		int i = length();
+		PQueueItem<Ticket> current = head;
+		StringBuffer sb = new StringBuffer();
+		while (i > 0) {
+			sb.append(
+					current.getPriority() + ":" +
+					priorityString(current.getPriority()) + ":" + id(current.getPriority()) + ","
+							+ current.getData().toString());
+			if (i > 1)
+				sb.append("\n");
+			current = current.getNext();
+			i--;
+		}
+		return sb.toString();
 	}
 
 }
